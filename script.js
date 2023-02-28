@@ -17,3 +17,8 @@ function multiply(a, b) {
 function divide(a, b) {
 	return b === 0 ? "LMFAO" : a / b;
 }
+
+// Operate functions based on operator function called
+function operate(operator, a, b) {
+	return operator(a, b);
+}
