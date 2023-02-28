@@ -7,3 +7,9 @@ function add(a, b) {
 function subtract(a, b) {
 	return a - b;
 }
+
+// Multiply operands together
+function multiply(a, b) {
+	return a * b;
+}
+
