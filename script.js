@@ -32,6 +32,13 @@ let displayText = document.createElement("span");
 // Digits to show up in the display box
 const digitButtons = document.querySelectorAll(".digit");
 digitButtons.forEach(digit => digit.addEventListener("click", () => {
-	displayText.textContent = digit.textContent;
+	displayText.textContent += digit.textContent;
 	display.appendChild(displayText);
 }));
+
+// Operators to show up in the display box
+const operatorButtons = document.querySelectorAll(".operator");
+operatorButtons.forEach(operator => operator.addEventListener("click", () => {
+	displayText.textContent += operator.textContent;
+}));
+
