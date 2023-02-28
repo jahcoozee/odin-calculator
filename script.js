@@ -1,3 +1,4 @@
+// OPERATIONS FUNCTIONS
 // Add operands together
 function add(a, b) {
 	return a + b;
@@ -22,3 +23,15 @@ function divide(a, b) {
 function operate(operator, a, b) {
 	return operator(a, b);
 }
+
+// DOM MANIPULATION AND LISTENING
+// Reference to the display box; append operands and operators in display
+const display = document.querySelector(".display");
+let displayText = document.createElement("span");
+
+// Digits to show up in the display box
+const digitButtons = document.querySelectorAll(".digit");
+digitButtons.forEach(digit => digit.addEventListener("click", () => {
+	displayText.textContent = digit.textContent;
+	display.appendChild(displayText);
+}));
