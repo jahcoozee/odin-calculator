@@ -68,6 +68,15 @@ buttons.forEach(button => button.addEventListener("click", () => {
 
 	// Assign correct function based on operator selected
 	if (button.className === "operator") {
+		if (result === 0) {
+			assignOperator();
+		} else {
+			assignOperator();
+			firstOperand = result;
+		}
+	}
+
+	function assignOperator() {
 		if (button.textContent === "+") {
 			updateSavedDisplay();
 			operator = add;
@@ -88,12 +97,12 @@ buttons.forEach(button => button.addEventListener("click", () => {
 			operator = divide;
 		}
 	}
-}));
 
-function updateSavedDisplay() {
-	savedDisplay.textContent = currentDisplay.textContent;
-	currentDisplay.textContent = 0;
-}
+	function updateSavedDisplay() {
+		savedDisplay.textContent += currentDisplay.textContent;
+		currentDisplay.textContent = 0;
+	}
+}));
 
 // Clear button logic
 const clearButton = document.querySelector(".clear");
