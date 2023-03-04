@@ -1,44 +1,107 @@
-// OPERATIONS FUNCTIONS
+// OPERATION FUNCTIONS
 // Add operands together
-function add(a, b) {
+const add = function (a, b) {
 	return a + b;
 }
 
 // Subtract operands together
-function subtract(a, b) {
+const subtract = function (a, b) {
 	return a - b;
 }
 
 // Multiply operands together
-function multiply(a, b) {
+const multiply = function (a, b) {
 	return a * b;
 }
 
 // Divide operands together
-function divide(a, b) {
+const divide = function (a, b) {
 	return b === 0 ? "LMFAO" : a / b;
 }
 
 // Operate functions based on operator function called
-function operate(operator, a, b) {
+const operate = function (operator, a, b) {
 	return operator(a, b);
 }
 
-// DOM MANIPULATION AND LISTENING
-// Reference to the display box; append operands and operators in display
-const display = document.querySelector(".display");
-let displayText = document.createElement("span");
+// DOM MANIPULATION AND EVENTS
+// Get reference to display element to populate with button inputs
+const currentDisplay = document.querySelector(".currentDisplay");
+const savedDisplay = document.querySelector(".savedDisplay");
 
-// Digits to show up in the display box
-const digitButtons = document.querySelectorAll(".digit");
-digitButtons.forEach(digit => digit.addEventListener("click", () => {
-	displayText.textContent += digit.textContent;
-	display.appendChild(displayText);
+// Store button inputs into variables
+let firstOperand = 0;
+let secondOperand = 0;
+let result = 0;
+let operator = null;
+
+// Operators and operands logic
+const buttons = document.querySelectorAll(".buttons-container > button");
+buttons.forEach(button => button.addEventListener("click", () => {
+
+	// Save second operand and operate
+	if (button.className === "evaluate") {
+
+		// Show result
+		secondOperand = currentDisplay.textContent;
+		result = operate(operator, Number(firstOperand), Number(secondOperand));
+		savedDisplay.textContent = result;
+
+		// Reassign variables for further expressions
+		firstOperand = result;
+		secondOperand = 0;
+	}
+
+	// Store the first operand into a variable when an operator is selected
+	if (button.className === "operator") {
+		firstOperand = currentDisplay.textContent;
+	}
+
+	// Display operands
+	if (button.className === "digit" && currentDisplay.textContent == 0) {
+		currentDisplay.textContent = button.textContent;
+	} else if (button.className === "evaluate") {
+		currentDisplay.textContent = "";
+	} else {
+		currentDisplay.textContent += button.textContent;
+	}
+
+	// Assign correct function based on operator selected
+	if (button.className === "operator") {
+		if (button.textContent === "+") {
+			updateSavedDisplay();
+			operator = add;
+		}
+		
+		if (button.textContent === "-") {
+			updateSavedDisplay();
+			operator = subtract;
+		}
+		
+		if (button.textContent === "*") {
+			updateSavedDisplay();
+			operator = multiply;
+		}
+		
+		if (button.textContent === "/") {
+			updateSavedDisplay();
+			operator = divide;
+		}
+	}
 }));
 
-// Operators to show up in the display box
-const operatorButtons = document.querySelectorAll(".operator");
-operatorButtons.forEach(operator => operator.addEventListener("click", () => {
-	displayText.textContent += operator.textContent;
-}));
+function updateSavedDisplay() {
+	savedDisplay.textContent = currentDisplay.textContent;
+	currentDisplay.textContent = 0;
+}
 
+// Clear button logic
+const clearButton = document.querySelector(".clear");
+clearButton.addEventListener("click", () => {
+	currentDisplay.textContent = "";
+	savedDisplay.textContent = "";
+	firstOperand = 0;
+	secondOperand = 0;
+	result = 0;
+	operator = null;
+});
