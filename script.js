@@ -39,43 +39,46 @@ let operator = null;
 const buttons = document.querySelectorAll(".buttons-container > button");
 buttons.forEach(button => button.addEventListener("click", () => {
 
-	// Save second operand and operate
-	if (button.className === "evaluate") {
-
-		// Show result
-		secondOperand = currentDisplay.textContent;
-		result = operate(operator, Number(firstOperand), Number(secondOperand));
-		savedDisplay.textContent = result;
-
-		// Reassign variables for further expressions
-		firstOperand = result;
-		secondOperand = 0;
-	}
-
-	// Store the first operand into a variable when an operator is selected
-	if (button.className === "operator") {
-		firstOperand = currentDisplay.textContent;
-	}
-
-	// Display operands
-	if (button.className === "digit" && currentDisplay.textContent == 0) {
-		currentDisplay.textContent = button.textContent;
-	} else if (button.className === "evaluate") {
-		currentDisplay.textContent = "";
-	} else {
-		currentDisplay.textContent += button.textContent;
-	}
-
-	// Assign correct function based on operator selected
-	if (button.className === "operator") {
-		if (result === 0) {
-			assignOperator();
+	// Push digits to display
+	if (button.className === "digit") {
+		if (operator === null) {
+			currentDisplay.textContent += button.textContent;
+			firstOperand = currentDisplay.textContent;
 		} else {
-			assignOperator();
-			firstOperand = result;
+			currentDisplay.textContent += button.textContent;
+			secondOperand = currentDisplay.textContent;
 		}
 	}
 
+	// Push operators to display
+	if (button.className === "operator") {
+
+		// Evaluate most recent pair of operands if operators
+		// are continuously selected
+		if (operator !== null) {
+			if (secondOperand === 0) {
+				assignOperator();
+				savedDisplay.textContent += button.textContent;
+			} else {
+				calculateResult();
+				savedDisplay.textContent += button.textContent;
+				assignOperator();
+			}
+		} else if (result === 0) {
+			assignOperator();
+			savedDisplay.textContent += button.textContent;
+		} else {
+			savedDisplay.textContent += button.textContent;
+			assignOperator();
+		}
+	}
+
+	// Evaluate current operands stored if upon = sign being pressed
+	if (button.className === "evaluate") {
+		calculateResult();
+	}
+
+	// Assign correct operator based on button selected
 	function assignOperator() {
 		if (button.textContent === "+") {
 			updateSavedDisplay();
@@ -98,9 +101,19 @@ buttons.forEach(button => button.addEventListener("click", () => {
 		}
 	}
 
+	// Updates saved display after each button input or calculation
 	function updateSavedDisplay() {
 		savedDisplay.textContent += currentDisplay.textContent;
-		currentDisplay.textContent = 0;
+		currentDisplay.textContent = "";
+	}
+
+	// Calculate the result of the current operands and operator saved and push to display
+	function calculateResult() {
+		currentDisplay.textContent = "";
+		result = operate(operator, Number(firstOperand), Number(secondOperand));
+		savedDisplay.textContent = result;
+		firstOperand = result;
+		secondOperand = 0;
 	}
 }));
 
