@@ -40,6 +40,10 @@ let operator = null;
 // Operators and operands logic
 buttons.forEach(button => button.addEventListener("click", () => {
 
+	if (savedDisplay.textContent === "NaN") {
+		clear();
+	}
+
 	// Push digits to display
 	if (button.className === "digit") {
 		if (operator === null) {
@@ -54,7 +58,9 @@ buttons.forEach(button => button.addEventListener("click", () => {
 	// Push operators to display
 	if (button.className === "operator") {
 		// Evaluate most recent pair of operands if operators are continuously selected
-		if (operator !== null) {
+		if (firstOperand === 0) {
+			clear();
+		} else if (operator !== null) {
 			if (secondOperand === 0) {
 				assignOperator();
 				savedDisplay.textContent += button.textContent;
@@ -77,7 +83,11 @@ buttons.forEach(button => button.addEventListener("click", () => {
 
 	// Evaluate current operands stored if upon = sign being pressed
 	if (button.className === "evaluate") {
-		calculateResult();
+		if (firstOperand === 0 || secondOperand === 0 || operator === null) {
+			currentDisplay.textContent = "";
+		} else {
+			calculateResult();
+		}
 	}
 
 	// Assign correct operator based on button selected
@@ -125,11 +135,13 @@ buttons.forEach(button => button.addEventListener("click", () => {
 }));
 
 // Clear button logic
-clearButton.addEventListener("click", () => {
+function clear() {
 	currentDisplay.textContent = "";
 	savedDisplay.textContent = "";
 	firstOperand = 0;
 	secondOperand = 0;
 	result = 0;
 	operator = null;
-});
+}
+
+clearButton.addEventListener("click", clear);
