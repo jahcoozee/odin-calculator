@@ -26,8 +26,8 @@ const operate = function (operator, a, b) {
 
 // DOM MANIPULATION AND EVENTS
 // Get reference to display element to populate with button inputs
-const currentDisplay = document.querySelector(".currentDisplay");
-const savedDisplay = document.querySelector(".savedDisplay");
+const currentDisplay = document.querySelector(".current-display");
+const savedDisplay = document.querySelector(".saved-display");
 
 // Store button inputs into variables
 let firstOperand = 0;
@@ -52,9 +52,7 @@ buttons.forEach(button => button.addEventListener("click", () => {
 
 	// Push operators to display
 	if (button.className === "operator") {
-
-		// Evaluate most recent pair of operands if operators
-		// are continuously selected
+		// Evaluate most recent pair of operands if operators are continuously selected
 		if (operator !== null) {
 			if (secondOperand === 0) {
 				assignOperator();
@@ -64,6 +62,9 @@ buttons.forEach(button => button.addEventListener("click", () => {
 				savedDisplay.textContent += button.textContent;
 				assignOperator();
 			}
+
+			// Change operator upon wrong selection
+			savedDisplay.textContent = firstOperand + button.textContent;
 		} else if (result === 0) {
 			assignOperator();
 			savedDisplay.textContent += button.textContent;
