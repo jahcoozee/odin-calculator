@@ -28,6 +28,8 @@ const operate = function (operator, a, b) {
 // Get reference to display element to populate with button inputs
 const currentDisplay = document.querySelector(".current-display");
 const savedDisplay = document.querySelector(".saved-display");
+const buttons = document.querySelectorAll(".buttons-container > button");
+const clearButton = document.querySelector(".clear");
 
 // Store button inputs into variables
 let firstOperand = 0;
@@ -36,7 +38,6 @@ let result = 0;
 let operator = null;
 
 // Operators and operands logic
-const buttons = document.querySelectorAll(".buttons-container > button");
 buttons.forEach(button => button.addEventListener("click", () => {
 
 	// Push digits to display
@@ -111,15 +112,19 @@ buttons.forEach(button => button.addEventListener("click", () => {
 	// Calculate the result of the current operands and operator saved and push to display
 	function calculateResult() {
 		currentDisplay.textContent = "";
-		result = operate(operator, Number(firstOperand), Number(secondOperand));
+		result = roundResult(operate(operator, Number(firstOperand), Number(secondOperand)));
 		savedDisplay.textContent = result;
 		firstOperand = result;
 		secondOperand = 0;
 	}
+
+	// Rounds calculations with long decimals
+	function roundResult(result) {
+		return +(Math.round(result + "e+10")  + "e-10");
+	}
 }));
 
 // Clear button logic
-const clearButton = document.querySelector(".clear");
 clearButton.addEventListener("click", () => {
 	currentDisplay.textContent = "";
 	savedDisplay.textContent = "";
